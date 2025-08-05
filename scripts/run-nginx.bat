@@ -1,0 +1,1 @@
+../nginx/nginx.exe -c local.conf -g "daemon off;"
