@@ -1,3 +1,4 @@
+db_data
 mariadb
 nginx
 venv
@@ -5,3 +6,5 @@ venv
 
 bloogle.png
 graph.gif
+
+*.zip

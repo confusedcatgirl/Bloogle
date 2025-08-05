@@ -18,11 +18,16 @@ Right now, the project is only optimized for Windows. Please support the project
 
 ## Setting up the Project
 
+### Manually
+
 1. Run "folder-setup.bat"
 2. Download MariaDB from <https://mariadb.org/download/>
    Select "Windows", your Architecture, and Package Type "Zip", not Debug Symbols
 3. Unzip it into the "mariadb" folder, so that the bin folder is in the folder directly.
-4.
+4. Download Nginx from <https://nginx.org/en/download.html>
+   Select ``nginx/Windows-x.y.z`` under the "Mainline Version" tag.
+
+### Automatic
 
 ## Overview
 
