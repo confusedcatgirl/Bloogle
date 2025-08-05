@@ -4,6 +4,15 @@
 
 Right now, the project is only optimized for Windows. Please support the project if you want to change that!
 
+## Index
+
+- [Folders](#folders)
+- [Setting up the Project](#setting-up-the-project)
+- [Overview](#overview)
+- [Crawler](#crawler)
+- [Indexer](#indexer)
+- [Databases](#databases)
+
 ## Folders
 
 `logs/` = Logs
@@ -26,6 +35,7 @@ Right now, the project is only optimized for Windows. Please support the project
 3. Unzip it into the "mariadb" folder, so that the bin folder is in the folder directly.
 4. Download Nginx from <https://nginx.org/en/download.html>
    Select ``nginx/Windows-x.y.z`` under the "Mainline Version" tag.
+5. Unzip it into the nginx folder so that the exe appears at the root.
 
 ### Automatic
 
@@ -62,11 +72,6 @@ Typically, when a user enters a query into a search engine it is a few keywords.
     If no more new pages can be found on the root, quit.
 
     Should the Bot meet the crawling quota, quit automatically.
-
-## Crawler Master
-
-The Crawler Master administrates all Crawling Instances. It assigns them URLs, updates the Main queue, and ensures that all Crawlers are running. It will also ensure that none of the
-domains inside the queue are spam. Media, with the exception being pdfs, are also cleaned out of the Main Queue, at least for now.
 
 ## Indexer
 
