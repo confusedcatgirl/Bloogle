@@ -1,0 +1,1 @@
+..\mariadb\bin\mariadbd --defaults-file="my.ini" --bind-address=0.0.0.0
