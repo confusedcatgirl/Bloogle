@@ -8,6 +8,7 @@ Right now, the project is only optimized for Windows. Please support the project
 
 - [Folders](#folders)
 - [Setting up the Project](#setting-up-the-project)
+- [ToDo](#todo)
 - [Overview](#overview)
 - [Crawler](#crawler)
 - [Indexer](#indexer)
@@ -38,6 +39,28 @@ Right now, the project is only optimized for Windows. Please support the project
 5. Unzip it into the nginx folder so that the exe appears at the root.
 
 ### Automatic
+
+Still WIP!!!
+
+## Todo
+
+- Setup
+  - Automatic Passwords for DB
+  - Automatic SQL
+- Crawler
+  - Robots
+  - Autolaunching
+  - Refreshing after a week (Low Prio)
+- Indexer
+  - Indexing
+  - Ranking
+  - Extracting data
+  - Gathering Terms
+- Query Engine
+  - Query API
+  - Properly connecting Website to backend
+- Website
+  - Language Selector
 
 ## Overview
 
