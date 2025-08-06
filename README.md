@@ -4,6 +4,16 @@
 
 Right now, the project is only optimized for Windows. Please support the project if you want to change that!
 
+## Index
+
+- [Folders](#folders)
+- [Setting up the Project](#setting-up-the-project)
+- [ToDo](#todo)
+- [Overview](#overview)
+- [Crawler](#crawler)
+- [Indexer](#indexer)
+- [Databases](#databases)
+
 ## Folders
 
 `logs/` = Logs
@@ -18,11 +28,39 @@ Right now, the project is only optimized for Windows. Please support the project
 
 ## Setting up the Project
 
+### Manually
+
 1. Run "folder-setup.bat"
 2. Download MariaDB from <https://mariadb.org/download/>
    Select "Windows", your Architecture, and Package Type "Zip", not Debug Symbols
 3. Unzip it into the "mariadb" folder, so that the bin folder is in the folder directly.
-4.
+4. Download Nginx from <https://nginx.org/en/download.html>
+   Select ``nginx/Windows-x.y.z`` under the "Mainline Version" tag.
+5. Unzip it into the nginx folder so that the exe appears at the root.
+
+### Automatic
+
+Still WIP!!!
+
+## Todo
+
+- Setup
+  - Automatic Passwords for DB
+  - Automatic SQL
+- Crawler
+  - Robots
+  - Autolaunching
+  - Refreshing after a week (Low Prio)
+- Indexer
+  - Indexing
+  - Ranking
+  - Extracting data
+  - Gathering Terms
+- Query Engine
+  - Query API
+  - Properly connecting Website to backend
+- Website
+  - Language Selector
 
 ## Overview
 
@@ -57,11 +95,6 @@ Typically, when a user enters a query into a search engine it is a few keywords.
     If no more new pages can be found on the root, quit.
 
     Should the Bot meet the crawling quota, quit automatically.
-
-## Crawler Master
-
-The Crawler Master administrates all Crawling Instances. It assigns them URLs, updates the Main queue, and ensures that all Crawlers are running. It will also ensure that none of the
-domains inside the queue are spam. Media, with the exception being pdfs, are also cleaned out of the Main Queue, at least for now.
 
 ## Indexer
 
