@@ -10,7 +10,7 @@ db = conn.connect(
 cur = db.cursor()
 
 QUOTA = 10
-USER_AGENT = 'BlorbBot'
+USER_AGENT = 'blorbot'
 HEADER = {
     'User-Agent': USER_AGENT,
     'Accept-Charset': 'utf-8',
@@ -43,18 +43,19 @@ while (running):
     # First it will check the database, and then, it will either skip it according to the database, or proceed.
     # However should there be no entry for the robots.txt, it should be fetched and processed.
     parsed = urlparse(link)
+    path = parsed.path.replace("*", "%")
 
-    cur.execute(f"SELECT * FROM repo.robots WHERE Domain LIKE '{parsed.netloc}' AND Path LIKE '{parsed.path.replace("*", "%")}'")
+    cur.execute(f"SELECT * FROM repo.robots WHERE Domain LIKE '{parsed.netloc}' AND Path LIKE '{path}'")
     paths = cur.fetchall()
 
     if paths == []:
-        robots = requests.get(f"{parsed.netloc}/robots.txt")
+        robots = requests.get(f"https://{parsed.netloc}/robots.txt")
 
-        if r.status_code != 200:
-            print(f" {r.status_code} -> Skipping")
+        if robots.status_code != 200:
+            print(f" robots.txt: {robots.status_code};", end="")
             continue
 
-        rules = r.text.lower().split("user-agent:")
+        rules = robots.text.lower().split("user-agent:")
         allowed = []
         forbidden = []
 
@@ -62,7 +63,14 @@ while (running):
             rule = rule.strip()
 
             if rule.startswith("*") or rule.startswith("blorbot"):
-                pass
+                for rule_pt in rule.split("\n"):
+                    if rule_pt.startswith("allow"):
+                        allowed += [rule_pt.split(":")[1].strip()]
+                    elif rule_pt.startswith("disallow"):
+                        forbidden += [rule_pt.split(":")[1].strip()]
+    
+    del rule_pt, rule, rules, robots, paths, parsed, path
+    break
 
     # Check here for the following: It's not in repo.queue, It's not in repo.raw either.
     cur.execute(f"SELECT * FROM repo.queue WHERE Link LIKE '%{link}'")

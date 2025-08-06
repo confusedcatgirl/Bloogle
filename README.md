@@ -162,8 +162,7 @@ MariaDB
 │       └── LastUpdate      Date    Not Null
 │
 └── sql_users
-    ├── crawler -> repo.raw: Read, Insert, Update
-    │              repo.queue: Read, Insert, Delete
+    ├── crawler -> repo.*: Read, Insert, Delete
     ├── indexer -> repo.raw: Read
     │              index.dictionary: Read, Insert, Delete
     │              index.pages: Insert, Update, Delete
