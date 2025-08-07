@@ -153,7 +153,7 @@ MariaDB
 │   │   ├── ID              ID      Primary Key, Not Null
 │   │   ├── Domain          String  Not Null
 │   │   ├── Path            String  Not Null
-│   │   └── Allowed         Bool    Not Null
+│   │   └── Allowed         VarChar Not Null
 │   └── raw
 │       ├── ID              ID      Primary Key, Not Null
 │       ├── Link            String  Not Null, Unique
@@ -162,8 +162,7 @@ MariaDB
 │       └── LastUpdate      Date    Not Null
 │
 └── sql_users
-    ├── crawler -> repo.raw: Read, Insert, Update
-    │              repo.queue: Read, Insert, Delete
+    ├── crawler -> repo.*: Read, Insert, Delete
     ├── indexer -> repo.raw: Read
     │              index.dictionary: Read, Insert, Delete
     │              index.pages: Insert, Update, Delete
