@@ -153,7 +153,7 @@ MariaDB
 │   │   ├── ID              ID      Primary Key, Not Null
 │   │   ├── Domain          String  Not Null
 │   │   ├── Path            String  Not Null
-│   │   └── Allowed         Bool    Not Null
+│   │   └── Allowed         VarChar Not Null
 │   └── raw
 │       ├── ID              ID      Primary Key, Not Null
 │       ├── Link            String  Not Null, Unique

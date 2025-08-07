@@ -1,4 +1,4 @@
-import requests, mysql.connector as conn, time
+import requests, mysql.connector as conn, time, re
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
@@ -39,16 +39,22 @@ while (running):
 
     print(link + ":", end="")
 
-    # TODO: Read robots.txt
     # First it will check the database, and then, it will either skip it according to the database, or proceed.
     # However should there be no entry for the robots.txt, it should be fetched and processed.
+    
+    # Disallow: folder/* -> Everything inside that folder is forbidden 
+    #
+    #
     parsed = urlparse(link)
     path = parsed.path.replace("*", "%")
 
-    cur.execute(f"SELECT * FROM repo.robots WHERE Domain LIKE '{parsed.netloc}' AND Path LIKE '{path}'")
+    cur.execute(f"SELECT COUNT(*) FROM repo.robots WHERE Domain = '{parsed.netloc}'")
     paths = cur.fetchall()
+    allowed = []
+    forbidden = []
+    stopped = False
 
-    if paths == []:
+    if paths[0][0] == 0:
         robots = requests.get(f"https://{parsed.netloc}/robots.txt")
 
         if robots.status_code != 200:
@@ -56,8 +62,6 @@ while (running):
             continue
 
         rules = robots.text.lower().split("user-agent:")
-        allowed = []
-        forbidden = []
 
         for rule in rules:
             rule = rule.strip()
@@ -65,12 +69,45 @@ while (running):
             if rule.startswith("*") or rule.startswith("blorbot"):
                 for rule_pt in rule.split("\n"):
                     if rule_pt.startswith("allow"):
-                        allowed += [rule_pt.split(":")[1].strip()]
+                        rule_link = rule_pt.split(":")[1].strip()
+                        if rule_link.endswith("/"): rule_link += "*"
+                        forbidden += [rule_link]
+
                     elif rule_pt.startswith("disallow"):
-                        forbidden += [rule_pt.split(":")[1].strip()]
-    
-    del rule_pt, rule, rules, robots, paths, parsed, path
-    break
+                        rule_link = rule_pt.split(":")[1].strip()
+                        if rule_link.endswith("/"): rule_link += "*"
+                        forbidden += [rule_link]
+                del rule_link, rule_pt
+
+        if allowed == []: allowed.append("/*")
+
+        # Add the rulez to da database
+        for allow in allowed:
+            cur.execute("INSERT INTO repo.robots (Domain, Path, Allowed) VALUES (%s, %s, \"True\")", (parsed.netloc, allow))
+
+        for disallow in forbidden:
+            cur.execute("INSERT INTO repo.robots (Domain, Path, Allowed) VALUES (%s, %s, \"False\")", (parsed.netloc, disallow))
+
+        # Forbidden checker
+        for dset in disallow:
+            regex = re.compile(dset)
+            if re.match(regex, link):
+                print(" Forbidden by robots.txt")
+                stopped = True
+                break
+
+        db.commit()
+    else:
+        cur.execute(f"SELECT Path,Allowed FROM repo.robots WHERE AND Domain = '{parsed.netloc}'")
+        all_paths = cur.execute()
+
+        # Forbidden checker
+        for dset in all_paths:
+            regex = re.compile(dset[0])
+            if re.match(regex, link) and dset[1] == "False":
+                print(" Forbidden by robots.txt")
+                stopped = True
+                break
 
     # Check here for the following: It's not in repo.queue, It's not in repo.raw either.
     cur.execute(f"SELECT * FROM repo.queue WHERE Link LIKE '%{link}'")
